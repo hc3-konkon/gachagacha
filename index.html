@@ -107,19 +107,32 @@
 .confetti {
   position: fixed;
   top: -10px;
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 12px;
   background-color: red;
-  opacity: 0.8;
+  opacity: 0.9;
   z-index: 99999;
-  border-radius: 50%;
-  animation: fall linear forwards;
+  border-radius: 0; /* ← 丸から長方形に変更 */
+  animation: fall var(--duration, 5s) linear forwards, spin var(--duration, 5s) ease-in-out forwards;
+  transform-origin: center;
+  pointer-events: none;
 }
 
 @keyframes fall {
-  to {
-    transform: translateY(100vh) rotate(720deg);
-    opacity: 0;
+  0% {
+    transform: translate(0, 0) rotateZ(0deg);
+  }
+  100% {
+    transform: translate(calc(-20vw + 40vw * var(--drift)), 100vh) rotateZ(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate3d(1, 1, 0, 0deg) skew(0deg, 0deg);
+  }
+  100% {
+    transform: rotate3d(1, 1, 0, 720deg) skew(10deg, 5deg);
   }
 }
 	
@@ -214,7 +227,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		    // ランダムな色
 		    const colors = ['#f44336', '#e91e63', '#9c27b0', '#3f51b5', '#03a9f4', '#4caf50', '#ffeb3b', '#ff9800'];
 		    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-		
+
+		    confetti.style.width = `${Math.random() * 4 + 4}px`;
+		    confetti.style.height = `${Math.random() * 8 + 10}px`;
+		    confetti.style.animationDuration = `${Math.random() * 2 + 3}s`; // 3〜5秒
+		    confetti.style.setProperty('--duration', confetti.style.animationDuration); // CSS変数で統一
+		    confetti.style.setProperty('--drift', Math.random());
+
 		    // ランダム位置と速度
 		    confetti.style.left = Math.random() * 100 + 'vw';
 		    confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
