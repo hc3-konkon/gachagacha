@@ -104,6 +104,25 @@
   100% { transform: translateX(-50%) scale(1); opacity: 0.5; }
 }
 
+.confetti {
+  position: fixed;
+  top: -10px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  opacity: 0.8;
+  z-index: 99999;
+  border-radius: 50%;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+	
 </style>
 <!--ガチャ用スタイルここまで-->
 
@@ -185,6 +204,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	function randomGif() {
 		var j = Math.floor(Math.random() * gifs.length);
 		selectedGif.src = gifs[j] + '?t=' + new Date().getTime();//初めから再生されるようにtimeをつける
+
+	function launchConfetti(count = 100) {
+		for (let i = 0; i < count; i++) {
+		    const confetti = document.createElement('div');
+		    confetti.classList.add('confetti');
+		
+		    // ランダムな色
+		    const colors = ['#f44336', '#e91e63', '#9c27b0', '#3f51b5', '#03a9f4', '#4caf50', '#ffeb3b', '#ff9800'];
+		    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+		
+		    // ランダム位置と速度
+		    confetti.style.left = Math.random() * 100 + 'vw';
+		    confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+		    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+		
+		    document.body.appendChild(confetti);
+		
+		    // アニメーション後に削除
+		    setTimeout(() => {
+		      confetti.remove();
+		    }, 5000);
+		  }
+		}
 	}
 
 	//ガチャがクリックされた時
@@ -192,6 +234,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	GachaNum = tempNum;
 	gachaTitle.textContent = `${GachaTitleList[GachaNum]}`;
 	randomGif();
+	launchConfetti(120); // ← ここで紙吹雪を発射！
 	timer = setTimeout(function() {
 		window.location.href = Gacha(GachaNum);
 		clearTimeout(timer);
