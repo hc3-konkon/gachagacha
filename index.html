@@ -2,6 +2,7 @@
 <html  lang="ja">
 	<head>
 		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>変環ガチャ！ | 名古屋大学 変換共創拠点</title>
 	</head>
 	<body>
@@ -21,10 +22,12 @@
 }
 
 .modal-btn{
-  float:left;
-  margin:0 50px;
-  height:auto;
-  text-align:center;
+  float: left;
+  margin: 10px auto;     /* ← 変更 */
+  height: auto;
+  text-align: center;
+  width: 100%;           /* ← 追加 */
+  max-width: 300px;      /* ← 追加（必要なら） */
 }
 
 .modal-header {
@@ -44,11 +47,12 @@
   background-color: #f4f4f4;
   border-radius: 30px;
   margin: 10% auto;
-  width: 50%;
+  width: 90%;          /* ← 変更（もともと50%） */
+  max-width: 500px;     /* ← 追加 */
 }
 
 .clear{
-  clear:left;
+  clear: both; /* ← left から both に */
 }
 
 #playGif {
