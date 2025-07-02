@@ -105,25 +105,29 @@
 }
 
 .confetti {
-  position: fixed;
-  top: -10px;
+  position: absolute; /* ← fixed から absolute に変更 */
+  left: 0;
   width: 6px;
   height: 12px;
   background-color: red;
   opacity: 0.9;
   z-index: 99999;
-  border-radius: 0; /* ← 丸から長方形に変更 */
-  animation: fall var(--duration, 5s) linear forwards, spin var(--duration, 5s) ease-in-out forwards;
+  border-radius: 0;
+  animation: fall var(--duration, 5s) linear forwards,
+             spin var(--duration, 5s) ease-in-out forwards;
   transform-origin: center;
   pointer-events: none;
 }
 
 @keyframes fall {
   0% {
-    transform: translateY(0) rotateZ(0deg);
+    top: -10px;
+    left: var(--startX, 50vw);
   }
   100% {
-    transform: translateY(100vh) rotateZ(360deg);
+    top: 100vh;
+    left: var(--endX, 60vw); /* 横風の演出 */
+    opacity: 0;
   }
 }
 @keyframes spin {
@@ -231,6 +235,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		    confetti.style.height = `${Math.random() * 8 + 10}px`;
 		    confetti.style.animationDuration = `${Math.random() * 2 + 3}s`; // 3〜5秒
 		    confetti.style.setProperty('--duration', confetti.style.animationDuration); // CSS変数で統一
+		    confetti.style.top = "-10px"; // ← 追加（ないと top: 0 が無視される）
+		    confetti.style.setProperty('--startX', Math.random() * 100 + 'vw');
+		    confetti.style.setProperty('--endX', (Math.random() * 100) + 'vw');
 
 		    // ランダム位置と速度
 		    confetti.style.left = Math.random() * 100 + 'vw';
