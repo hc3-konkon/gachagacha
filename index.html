@@ -20,8 +20,8 @@
 @keyframes shake{0%{transform:translate(0,0) rotate(0);}20%{transform:translate(-2px,2px) rotate(-1deg);}40%{transform:translate(2px,-2px) rotate(1deg);}60%{transform:translate(-1px,1px) rotate(0);}80%{transform:translate(1px,-1px) rotate(-1deg);}100%{transform:translate(0,0) rotate(0);}}
 .shake{animation:shake .6s ease-in-out infinite;} */
 
-.modal-body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle,rgba(255,255,0,.2) 0%,transparent 70%);animation:shimmer 2s infinite linear;pointer-events:none;z-index:1;}
-@keyframes shimmer{0%{transform:translateX(-50%) scale(1);opacity:.5;}50%{transform:translateX(50%) scale(1.2);opacity:1;}100%{transform:translateX(-50%) scale(1);opacity:.5;}}
+/* .modal-body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle,rgba(255,255,0,.2) 0%,transparent 70%);animation:shimmer 2s infinite linear;pointer-events:none;z-index:1;}
+@keyframes shimmer{0%{transform:translateX(-50%) scale(1);opacity:.5;}50%{transform:translateX(50%) scale(1.2);opacity:1;}100%{transform:translateX(-50%) scale(1);opacity:.5;}} */
 
 /* 紙吹雪（長方形・ひらひら） */
 .confetti{position:absolute;left:0;width:6px;height:12px;background:red;opacity:.9;z-index:99999;border-radius:0;animation:fall var(--duration,8s) linear forwards,spin var(--duration,8s) ease-in-out forwards;transform-origin:center;pointer-events:none;}
@@ -192,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
