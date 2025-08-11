@@ -24,9 +24,9 @@
 @keyframes shimmer{0%{transform:translateX(-50%) scale(1);opacity:.5;}50%{transform:translateX(50%) scale(1.2);opacity:1;}100%{transform:translateX(-50%) scale(1);opacity:.5;}} */
 
 /* 紙吹雪（長方形・ひらひら） */
-.confetti{position:absolute;left:0;width:6px;height:12px;background:red;opacity:.9;z-index:99999;border-radius:0;animation:fall var(--duration,8s) linear forwards,spin var(--duration,8s) ease-in-out forwards;transform-origin:center;pointer-events:none;}
+/* .confetti{position:absolute;left:0;width:6px;height:12px;background:red;opacity:.9;z-index:99999;border-radius:0;animation:fall var(--duration,8s) linear forwards,spin var(--duration,8s) ease-in-out forwards;transform-origin:center;pointer-events:none;}
 @keyframes fall{0%{top:-10px;left:var(--startX,50vw);}100%{top:100vh;left:var(--endX,60vw);opacity:0;}}
-@keyframes spin{0%{transform:rotate3d(1,1,0,0deg) skew(0,0);}100%{transform:rotate3d(1,1,0,720deg) skew(10deg,5deg);}}
+@keyframes spin{0%{transform:rotate3d(1,1,0,0deg) skew(0,0);}100%{transform:rotate3d(1,1,0,720deg) skew(10deg,5deg);}} */
 
 /* ▼ 結果画像（最初は非表示） */
 .result-wrap{margin-top:12px;position:relative;z-index:2;display:none;}
@@ -192,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
 
