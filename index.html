@@ -38,7 +38,7 @@
 <div id="gachaModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3>変環ガチャ!　</h3>
+      <h3>変環ステッカーガチャ!　</h3>
       <h2 id="gachaTitleTxt"></h2>
     </div>
     <div class="modal-body">
@@ -62,7 +62,7 @@
 <!-- ガチャ本体 -->
 <div class="modal-btn" onclick="choiceGachaBox(0)" style="cursor:pointer;">
   <img loading="lazy" src="image1.png" width="250" height="400" alt="論文・レポートのガチャ">
-  <p>変換共創拠点の活動報告<br>記事(note)がランダムに開きます</p>
+  <p>変換共創拠点のステッカー全4種<br>画像がランダムに開きます</p>
 </div>
 <div class="clear"></div>
 
@@ -76,7 +76,7 @@ const GachaList = [[
   "https://note.com/hc3_henkan/n/n3cb0d1c9665e",
   "https://note.com/hc3_henkan/n/n0949d18d9fd3"
 ]];
-const GachaTitleList = ["活動報告"];
+const GachaTitleList = [""];
 
 /* 抽選アニメGIF（1つでもOK） */
 const gifs = ['animeRed.gif'];
@@ -175,12 +175,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // 外側クリックで閉じる
-  window.addEventListener('click',(e)=>{
-    if(e.target===jsModal){
-      jsModal.style.display='none';
-      selectedGif.classList.remove('shake');
-    }
-  });
+  // window.addEventListener('click',(e)=>{
+  //   if(e.target===jsModal){
+  //     jsModal.style.display='none';
+  //     selectedGif.classList.remove('shake');
+  //   }
+  // });
 
   // 戻る・進む
   window.addEventListener('pageshow',(e)=>{
@@ -192,5 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
+
 
 
