@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html  lang="ja">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>変環ガチャ！ | 名古屋大学 変換共創拠点</title>
-	</head>
-	<body>
-	
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>変環ガチャ！ | 名古屋大学 変換共創拠点</title>
+  </head>
+  <body>
+
 <!--ガチャ用スタイルここから-->
 <style type="text/css">
 .modal {
@@ -16,18 +16,18 @@
   display: none;
   z-index: 9999;
   height: 100%;
-  width: 100%; 
+  width: 100%;
   overflow: auto;
   background-color: rgba(0,0,0,0.5);
 }
 
 .modal-btn{
   float: left;
-  margin: 10px auto;     /* ← 変更 */
+  margin: 10px auto;
   height: auto;
   text-align: center;
-  width: 100%;           /* ← 追加 */
-  max-width: 300px;      /* ← 追加（必要なら） */
+  width: 100%;
+  max-width: 300px;
 }
 
 .modal-header {
@@ -39,21 +39,21 @@
 }
 
 .modal-body {
-  padding:  20px;
+  padding: 20px;
   color: black;
+  position: relative;
+  z-index: 0;
 }
 
 .modal-content {
   background-color: #f4f4f4;
   border-radius: 30px;
   margin: 10% auto;
-  width: 90%;          /* ← 変更（もともと50%） */
-  max-width: 500px;     /* ← 追加 */
+  width: 90%;
+  max-width: 500px;
 }
 
-.clear{
-  clear: both; /* ← left から both に */
-}
+.clear{ clear: both; }
 
 #playGif {
   width: 100%;
@@ -61,13 +61,11 @@
   margin: auto;
 }
 
-/* 1. モーダルに光る演出 */
+/* 演出 */
 @keyframes flash {
   0%, 100% { box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.7); }
   50% { box-shadow: 0 0 40px 20px rgba(255, 215, 0, 1); }
 }
-
-/* 2. ガチャGIFを振動させる */
 @keyframes shake {
   0% { transform: translate(0px, 0px) rotate(0deg); }
   20% { transform: translate(-2px, 2px) rotate(-1deg); }
@@ -76,16 +74,7 @@
   80% { transform: translate(1px, -1px) rotate(-1deg); }
   100% { transform: translate(0px, 0px) rotate(0deg); }
 }
-
-.shake {
-  animation: shake 0.6s ease-in-out infinite;
-}
-
-/* 3. キラキラ背景エフェクト */
-.modal-body {
-  position: relative; /* 追加 */
-  z-index: 0;
-}
+.shake { animation: shake 0.6s ease-in-out infinite; }
 
 .modal-body::before {
   content: "";
@@ -97,15 +86,15 @@
   pointer-events: none;
   z-index: 1;
 }
-
 @keyframes shimmer {
   0% { transform: translateX(-50%) scale(1); opacity: 0.5; }
   50% { transform: translateX(50%) scale(1.2); opacity: 1; }
   100% { transform: translateX(-50%) scale(1); opacity: 0.5; }
 }
 
+/* 紙吹雪（長方形・ひらひら） */
 .confetti {
-  position: absolute; /* ← fixed から absolute に変更 */
+  position: absolute;
   left: 0;
   width: 6px;
   height: 12px;
@@ -113,203 +102,209 @@
   opacity: 0.9;
   z-index: 99999;
   border-radius: 0;
-  animation: fall var(--duration, 5s) linear forwards,
-             spin var(--duration, 5s) ease-in-out forwards;
+  animation: fall var(--duration, 8s) linear forwards,
+             spin var(--duration, 8s) ease-in-out forwards;
   transform-origin: center;
   pointer-events: none;
 }
-
 @keyframes fall {
-  0% {
-    top: -10px;
-    left: var(--startX, 50vw);
-  }
-  100% {
-    top: 100vh;
-    left: var(--endX, 60vw); /* 横風の演出 */
-    opacity: 0;
-  }
+  0% { top: -10px; left: var(--startX, 50vw); }
+  100% { top: 100vh; left: var(--endX, 60vw); opacity: 0; }
 }
 @keyframes spin {
-  0% {
-    transform: rotate3d(1, 1, 0, 0deg) skew(0deg, 0deg);
-  }
-  100% {
-    transform: rotate3d(1, 1, 0, 720deg) skew(10deg, 5deg);
-  }
+  0% { transform: rotate3d(1, 1, 0, 0deg) skew(0deg, 0deg); }
+  100% { transform: rotate3d(1, 1, 0, 720deg) skew(10deg, 5deg); }
 }
-	
+
+/* ▼ 追加：結果画像用のグリッドとリンク */
+.result-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+  z-index: 2; /* モヤ演出より手前 */
+  position: relative;
+}
+.result-grid img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.12);
+}
+.result-link{
+  display: inline-block;
+  margin-top: 16px;
+  text-align: center;
+  text-decoration: underline;
+  color: #0b5bd3;
+  font-weight: 600;
+  z-index: 2;
+  position: relative;
+}
 </style>
 <!--ガチャ用スタイルここまで-->
 
 <!--カプセル排出のモーダルウィンドウここから-->
 <div id="gachaModal" class="modal">
-	<div class="modal-content">
-		<div class="modal-header">
-			<h3>変環ガチャ!　</h3>
-			<h2 id="gachaTitleTxt"></h2>
-		</div>
-		<div class="modal-body">
-			<img id="playGif" src="" alt="抽選のアニメーション" style="display: block; margin: auto;">
-			<p>アニメーション終了後、当たった記事のページに飛びます。
-                           いいね・フォローもぜひよろしくお願いします！！</p>
-			<button class="js-result">結果だけ見る</button>
-			
-		</div>
-	</div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>変環ガチャ!　</h3>
+      <h2 id="gachaTitleTxt"></h2>
+    </div>
+    <div class="modal-body">
+      <img id="playGif" src="" alt="抽選のアニメーション" style="display: block; margin: auto;">
+      <p>アニメーションのあと、下にランダム画像が4枚出ます。気になる方はリンクからどうぞ！</p>
+
+      <!-- ▼ ここに4枚の画像が入る -->
+      <div id="resultImages" class="result-grid" aria-live="polite"></div>
+
+      <!-- ▼ 一番下の文字リンク -->
+      <a id="resultLink" class="result-link" href="#" target="_blank" rel="noopener">記事をひらく</a>
+
+      <!-- ▼ ボタンは閉じる挙動に変更 -->
+      <button class="js-result" style="margin-top:12px;">閉じる</button>
+    </div>
+  </div>
 </div>
 <!--カプセル排出のモーダルウィンドウここまで-->
 
-<!--☆☆☆ガチャガチャNo.0の設置ここから：choiceGachaBox(0)←ここの数字でガチャガチャを選択☆☆☆-->
+<!--☆☆☆ガチャガチャNo.0☆☆☆-->
 <div class="modal-btn" onclick="choiceGachaBox(0)" style="cursor: pointer;">
-	<img loading="lazy" src="image1.png" width="250" height="400" alt="論文・レポートのガチャ">
-	<p >変換共創拠点の活動報告<br>
-	記事(note)がランダムに開きます</p>
+  <img loading="lazy" src="image1.png" width="250" height="400" alt="論文・レポートのガチャ">
+  <p>変換共創拠点の活動報告<br>記事(note)がランダムに開きます</p>
 </div>
-<!--☆☆☆ガチャガチャNo.0の設置ここまで：choiceGachaBox(0)←ここの数字でガチャガチャを選択☆☆☆-->
-
-<!--この下に新規のガチャガチャを追加-->
-
 <div class="clear"></div>
 
 <!--ガチャ用スクリプトここから-->
 <script type="text/javascript">
-
-/* ☆☆☆ガチャ結果リスト☆☆☆ */
+/* ▼ ガチャのリンク先（必要なら使う） */
 const GachaList = [
-//ガチャガチャNo.0の結果リスト
-	[
-	"https://note.com/hc3_henkan/n/n3dd0f0d31baa",
-	"https://note.com/hc3_henkan/n/n3cb0d1c9665e",
-	"https://note.com/hc3_henkan/n/n0949d18d9fd3"
-	],
-//この上に結果リストを追加していく
+  [
+    "https://note.com/hc3_henkan/n/n3dd0f0d31baa",
+    "https://note.com/hc3_henkan/n/n3cb0d1c9665e",
+    "https://note.com/hc3_henkan/n/n0949d18d9fd3"
+  ],
 ];
 
-/* ☆☆☆ガチャタイトル(ガチャリストと順番をそろえること)☆☆☆ */
-//モーダルのタイトル部分に表示されます
-const GachaTitleList = [
-	"活動報告"
-//この上に追加していく
+/* ▼ タイトル表示用 */
+const GachaTitleList = [ "活動報告" ];
+
+/* ▼ 抽選アニメーションのGIF（必要に応じて追加） */
+const gifs = [ 'animeRed.gif' ];
+
+/* ▼ ランダム表示する画像プール（4枚以上登録可・下からランダムで4枚表示） */
+const ImagePool = [
+  'result1.png', // ← ここを実ファイルに差し替え
+  'result2.png',
+  'result3.png',
+  'result4.png',
+  // 'result5.jpg', 'result6.jpg' ... 追加OK
 ];
 
-/* ☆☆☆gif画像(ガチャ排出アニメーションのURLを指定する)☆☆☆ */
-const gifs = [
-	'animeRed.gif'
-];
+document.addEventListener('DOMContentLoaded', () => {
+  let GachaNum = 0;
 
+  const jsModal = document.getElementById('gachaModal');
+  const jamp = document.querySelector('.js-result');
+  const gachaTitle = document.getElementById('gachaTitleTxt');
+  const selectedGif = document.getElementById("playGif");
+  const resultImages = document.getElementById('resultImages');
+  const resultLink = document.getElementById('resultLink');
 
+  function Gacha(tempNum) {
+    var k = Math.floor(Math.random() * GachaList[tempNum].length);
+    return GachaList[tempNum][k];
+  }
 
-//モーダル関係 ※ここから下は編集しない
-document.addEventListener('DOMContentLoaded', (event) => {
-	let GachaNum = 0;//ガチャ番号を保存する変数
-	let timer;//ガチャ結果に遷移するタイマーを保存する変数
-	
-	const jsModal = document.getElementById('gachaModal');
-	const jamp = document.querySelector('.js-result');
-	const gachaTitle = document.getElementById('gachaTitleTxt');
-        const selectedGif = document.getElementById("playGif");
+  function randomGif() {
+    var j = Math.floor(Math.random() * gifs.length);
+    selectedGif.src = gifs[j] + '?t=' + new Date().getTime();
+  }
 
-	//ガチャを抽選する関数
-	function Gacha(tempNum) {
-		var k = Math.floor(Math.random() * GachaList[tempNum].length);
-		return GachaList[tempNum][k];
-	}
+  function launchConfetti(count = 100) {
+    for (let i = 0; i < count; i++) {
+      const confetti = document.createElement('div');
+      confetti.classList.add('confetti');
 
-	//ランダムなgifを再生する関数
-	function randomGif() {
-		var j = Math.floor(Math.random() * gifs.length);
-		selectedGif.src = gifs[j] + '?t=' + new Date().getTime();//初めから再生されるようにtimeをつける
-	}
+      const colors = ['#f44336', '#e91e63', '#9c27b0', '#3f51b5', '#03a9f4', '#4caf50', '#ffeb3b', '#ff9800'];
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
 
-	function launchConfetti(count = 100) {
-		for (let i = 0; i < count; i++) {
-		    const confetti = document.createElement('div');
-		    confetti.classList.add('confetti');
-		
-		    // ランダムな色
-		    const colors = ['#f44336', '#e91e63', '#9c27b0', '#3f51b5', '#03a9f4', '#4caf50', '#ffeb3b', '#ff9800'];
-		    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.width = `${Math.random() * 4 + 4}px`;
+      confetti.style.height = `${Math.random() * 8 + 10}px`;
+      const dur = `${Math.random() * 4 + 6}s`; // 6〜10秒でゆっくり
+      confetti.style.animationDuration = dur;
+      confetti.style.setProperty('--duration', dur);
+      confetti.style.top = "-10px";
+      confetti.style.setProperty('--startX', Math.random() * 100 + 'vw');
+      confetti.style.setProperty('--endX', (Math.random() * 100) + 'vw');
 
-		    confetti.style.width = `${Math.random() * 4 + 4}px`;
-		    confetti.style.height = `${Math.random() * 8 + 10}px`;
-		    // confetti.style.animationDuration = `${Math.random() * 2 + 3}s`; // 3〜5秒
-		    confetti.style.animationDuration = `${Math.random() * 4 + 6}s`; // 6〜10秒
-		    confetti.style.setProperty('--duration', confetti.style.animationDuration);
-		    confetti.style.setProperty('--duration', confetti.style.animationDuration); // CSS変数で統一
-		    confetti.style.top = "-10px"; // ← 追加（ないと top: 0 が無視される）
-		    confetti.style.setProperty('--startX', Math.random() * 100 + 'vw');
-		    confetti.style.setProperty('--endX', (Math.random() * 100) + 'vw');
+      document.body.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 12000);
+    }
+  }
 
-		    // ランダム位置と速度
-		    confetti.style.left = Math.random() * 100 + 'vw';
-		    confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
-		    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-		
-		    document.body.appendChild(confetti);
-		
-		    // アニメーション後に削除
-		    setTimeout(() => {
-		      confetti.remove();
-		    }, 5000);
-		  }
-	}
-	
+  // ▼ 画像プールから重複なしで n 枚引く
+  function pickRandomImages(pool, n = 4) {
+    const arr = [...pool];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const r = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[r]] = [arr[r], arr[i]];
+    }
+    return arr.slice(0, Math.min(n, arr.length));
+  }
 
-	//ガチャがクリックされた時
-	window.choiceGachaBox = function(tempNum) {
-	GachaNum = tempNum;
-	gachaTitle.textContent = `${GachaTitleList[GachaNum]}`;
-	randomGif();
-	launchConfetti(120); // ← ここで紙吹雪を発射！
-	timer = setTimeout(function() {
-		window.location.href = Gacha(GachaNum);
-		clearTimeout(timer);
-	}, 8.5*1000);
+  // ▼ ガチャがクリックされた時
+  window.choiceGachaBox = function(tempNum) {
+    GachaNum = tempNum;
+    gachaTitle.textContent = `${GachaTitleList[GachaNum]}`;
 
-	jsModal.style.display = 'block';
-	document.querySelector('.modal-content').style.animation = "flash 1s ease-in-out 3";
-	selectedGif.classList.add("shake");
-	};
-	// window.choiceGachaBox = function(tempNum) {
-	// 	GachaNum = tempNum;
-	// 	gachaTitle.textContent = `${GachaTitleList[GachaNum]}`;
-	// 	randomGif();
-	// 	timer = setTimeout(function() {
-	// 		window.location.href = Gacha(GachaNum);//ガチャ排出
-	// 		clearTimeout(timer);//タイマーリセット
-	// 	}, 8.5*1000);//ガチャ結果へ9秒後に遷移
-	// 	jsModal.style.display = 'block';//モーダル表示
-	// };
+    // アニメ/GIF・紙吹雪・画像・リンク設定
+    randomGif();
+    launchConfetti(120);
 
-	//「結果だけ見る」ボタンがクリックされた時
-	jamp.addEventListener('click', result);
-	function result() {
-		window.location.href = Gacha(GachaNum);//ガチャ排出
-		clearTimeout(timer);//タイマーリセット
-	}
+    // 4枚ランダム表示
+    resultImages.innerHTML = '';
+    const picks = pickRandomImages(ImagePool, 4);
+    picks.forEach(src => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = 'おすすめ画像';
+      resultImages.appendChild(img);
+    });
 
-	//モーダルコンテンツ以外がクリックされた時→モーダルウィンドウを閉じる
-	window.addEventListener('click', outsideClose);
-	function outsideClose(event){
-		if (event.target === jsModal) {
-			clearTimeout(timer);//タイマーリセット
-			jsModal.style.display = 'none';//モーダル非表示
-		}
-	}
-	
-	//戻る・進むボタン対応
-	window.addEventListener('pageshow', pageShow);
-	function pageShow(event){
-		jsModal.style.display = 'none';//モーダル非表示
-		if (event.persisted) { //戻る・進むボタンのとき
-			window.location.reload();//キャッシュ対応のための強制リロード
-		}
-	}
-	
+    // 一番下の文字リンク（自動リンク送りは無効）
+    const url = Gacha(GachaNum);   // ランダムで1件選ぶだけ
+    resultLink.href = url;
+
+    // モーダル表示 & 振動演出
+    jsModal.style.display = 'block';
+    document.querySelector('.modal-content').style.animation = "flash 1s ease-in-out 3";
+    selectedGif.classList.add("shake");
+  };
+
+  // ▼ 「閉じる」ボタン（遷移しない）
+  jamp.addEventListener('click', () => {
+    jsModal.style.display = 'none';
+    selectedGif.classList.remove("shake");
+  });
+
+  // モーダル外クリックで閉じる
+  window.addEventListener('click', (event) => {
+    if (event.target === jsModal) {
+      jsModal.style.display = 'none';
+      selectedGif.classList.remove("shake");
+    }
+  });
+
+  // 戻る・進む
+  window.addEventListener('pageshow', (event) => {
+    jsModal.style.display = 'none';
+    if (event.persisted) { window.location.reload(); }
+  });
 });
 </script>
 <!--ガチャ用スクリプトここまで-->
 
-	</body>
+  </body>
 </html>
