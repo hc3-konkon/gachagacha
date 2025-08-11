@@ -9,24 +9,36 @@
 
 <style>
 .modal{position:fixed;left:0;top:0;display:none;z-index:9999;height:100%;width:100%;overflow:auto;background-color:rgba(0,0,0,0.5);}
-.modal-btn{float:left;margin:10px auto;height:auto;text-align:center;width:100%;max-width:300px;}
 .modal-header{border-bottom:1px solid #e4e4e4;padding:3px 20px;display:flex;justify-content:center;align-items:center;}
 .modal-body{padding:20px;color:black;position:relative;z-index:0;}
 .modal-content{background-color:#f4f4f4;border-radius:30px;margin:10% auto;width:90%;max-width:500px;}
-.clear{clear:both;}
 #playGif{width:100%;height:auto;margin:auto;display:block;}
 
-/* @keyframes flash{0%,100%{box-shadow:0 0 20px 10px rgba(255,215,0,.7);}50%{box-shadow:0 0 40px 20px rgba(255,215,0,1);}}
-@keyframes shake{0%{transform:translate(0,0) rotate(0);}20%{transform:translate(-2px,2px) rotate(-1deg);}40%{transform:translate(2px,-2px) rotate(1deg);}60%{transform:translate(-1px,1px) rotate(0);}80%{transform:translate(1px,-1px) rotate(-1deg);}100%{transform:translate(0,0) rotate(0);}}
-.shake{animation:shake .6s ease-in-out infinite;} */
-
-/* .modal-body::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle,rgba(255,255,0,.2) 0%,transparent 70%);animation:shimmer 2s infinite linear;pointer-events:none;z-index:1;}
-@keyframes shimmer{0%{transform:translateX(-50%) scale(1);opacity:.5;}50%{transform:translateX(50%) scale(1.2);opacity:1;}100%{transform:translateX(-50%) scale(1);opacity:.5;}} */
-
-/* 紙吹雪（長方形・ひらひら） */
-/* .confetti{position:absolute;left:0;width:6px;height:12px;background:red;opacity:.9;z-index:99999;border-radius:0;animation:fall var(--duration,8s) linear forwards,spin var(--duration,8s) ease-in-out forwards;transform-origin:center;pointer-events:none;}
-@keyframes fall{0%{top:-10px;left:var(--startX,50vw);}100%{top:100vh;left:var(--endX,60vw);opacity:0;}}
-@keyframes spin{0%{transform:rotate3d(1,1,0,0deg) skew(0,0);}100%{transform:rotate3d(1,1,0,720deg) skew(10deg,5deg);}} */
+/* ▼ ガチャ筐体部分のセンタリング */
+.gacha-wrap{
+  display:flex;
+  justify-content:center;   /* 中央寄せ */
+  align-items:flex-start;
+  flex-wrap:wrap;
+  gap:20px;
+  margin:20px 0;
+}
+.modal-btn{
+  /* float を廃止し、箱自体を中央へ */
+  float:none;
+  display:inline-block;
+  width:auto;
+  max-width:100%;
+  text-align:center;         /* 中のテキストを中央 */
+  margin:10px auto;
+  cursor:pointer;
+}
+.modal-btn img{
+  display:block;
+  margin:0 auto;            /* 画像を中央に */
+  height:auto;
+  max-width:100%;
+}
 
 /* ▼ 結果画像（最初は非表示） */
 .result-wrap{margin-top:12px;position:relative;z-index:2;display:none;}
@@ -53,22 +65,18 @@
       <!-- ▼ 一番下の文字リンク -->
       <a id="resultLink" class="result-link" href="https://forms.gle/124FFLrSvFF9UdF97" target="_blank" rel="noopener">アンケートはこちら！</a>
 
-      <!-- ▼ 閉じる -->
-<!--       <button class="js-result" style="margin-top:12px;">閉じる</button> -->
+      <!-- ▼ 閉じるボタンは非表示（削除済み） -->
     </div>
   </div>
 </div>
 
-<!-- ガチャ本体 -->
-<!-- <div class="modal-btn" onclick="choiceGachaBox(0)" style="cursor:pointer;">
-  <img loading="lazy" src="image1.png" width="250" height="400" alt="論文・レポートのガチャ">
-  <p>変換共創拠点のステッカー全4種<br>画像がランダムに開きます</p>
-</div> -->
-<div class="modal-btn" onclick="choiceGachaBox(0)" style="cursor:pointer; text-align:center;">
-  <img loading="lazy" src="image1.png" width="250" height="400" alt="論文・レポートのガチャ" style="display:block; margin:0 auto;">
-  <p>変換共創拠点の活動報告<br>記事(note)がランダムに開きます</p>
+<!-- ガチャ本体（筐体） -->
+<div class="gacha-wrap">
+  <div class="modal-btn" onclick="choiceGachaBox(0)">
+    <img loading="lazy" src="image1.png" width="250" height="400" alt="論文・レポートのガチャ">
+    <p>変換共創拠点の活動報告<br>記事(note)がランダムに開きます</p>
+  </div>
 </div>
-<div class="clear"></div>
 
 <script>
 /* ===== 設定 ===== */
@@ -97,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let GachaNum = 0;
 
   const jsModal = document.getElementById('gachaModal');
-  const jamp = document.querySelector('.js-result');
+  const jamp = document.querySelector('.js-result'); // ない場合があるので後でnullチェック
   const gachaTitle = document.getElementById('gachaTitleTxt');
   const selectedGif = document.getElementById('playGif');
 
@@ -116,24 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function pickOneImage(pool){
     return pool[Math.floor(Math.random()*pool.length)];
   }
-  function launchConfetti(count=100){
-    for(let i=0;i<count;i++){
-      const c=document.createElement('div');
-      c.classList.add('confetti');
-      const colors=['#f44336','#e91e63','#9c27b0','#3f51b5','#03a9f4','#4caf50','#ffeb3b','#ff9800'];
-      c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-      c.style.width = `${Math.random()*4+4}px`;
-      c.style.height= `${Math.random()*8+10}px`;
-      const dur = `${Math.random()*4+6}s`;
-      c.style.animationDuration = dur;
-      c.style.setProperty('--duration',dur);
-      c.style.top="-10px";
-      c.style.setProperty('--startX',Math.random()*100+'vw');
-      c.style.setProperty('--endX',Math.random()*100+'vw');
-      document.body.appendChild(c);
-      setTimeout(()=>c.remove(),12000);
-    }
-  }
 
   // クリック時
   window.choiceGachaBox = function(tempNum){
@@ -147,44 +137,30 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedGif.style.display = 'block';
 
     randomGif();
-    launchConfetti(120);
 
-    // モーダル表示 & 振動
+    // モーダル表示
     jsModal.style.display = 'block';
-    // document.querySelector('.modal-content').style.animation = "flash 1s ease-in-out 3";
-    // selectedGif.classList.add('shake');
 
     // GIF終了後に「GIFを消す → PNG 1枚だけ表示 → リンク表示」
     setTimeout(()=>{
-      // 1) GIFを非表示
-      // selectedGif.classList.remove('shake');
       selectedGif.style.display = 'none';
 
-      // 2) PNG 1枚だけ
       const picked = pickOneImage(ImagePool);
       resultImg.src = picked;
       resultWrap.style.display = 'block';
       requestAnimationFrame(()=>resultImg.classList.add('show')); // フェードイン
 
-      // 3) 文字リンク
       resultLink.href = Gacha(GachaNum);
       resultLink.style.display = 'inline-block';
     }, GIF_DURATION_MS);
   };
 
-  // 閉じる
-  jamp.addEventListener('click', ()=>{
-    jsModal.style.display = 'none';
-    selectedGif.classList.remove('shake');
-  });
-
-  // 外側クリックで閉じる
-  // window.addEventListener('click',(e)=>{
-  //   if(e.target===jsModal){
-  //     jsModal.style.display='none';
-  //     selectedGif.classList.remove('shake');
-  //   }
-  // });
+  // （ボタンを置かない構成なので安全のためnullチェック）
+  if (jamp) {
+    jamp.addEventListener('click', ()=>{
+      jsModal.style.display = 'none';
+    });
+  }
 
   // 戻る・進む
   window.addEventListener('pageshow',(e)=>{
@@ -196,11 +172,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
